@@ -1,0 +1,61 @@
+###############################################################################
+#                                                                             #
+# mrbig_core/Cargo.toml                                                       #
+#                                                                             #
+# Handcrafted with love by MrBig Mobsters                                     #
+# All rights reserved                                                         #
+#                                                                             #
+#                                                                             #
+# Description: Cargo config for mrbig_core library crate.                     #
+# See:         https://doc.rust-lang.org/cargo/reference/manifest.html        #
+###############################################################################
+
+[package]
+name = "mrbig_core"
+version = "{{crateVersion}}"
+authors = [
+    "MrBig Mobsters <mobsters@mrbig.org>"
+]
+edition = "2018"
+repository = "https://github.com/bobbie-ai/mrbig"
+homepage = "https://github.com/bobbie-ai/mrbig"
+documentation = "https://github.com/bobbie-ai/mrbig"
+license = "MIT/Apache-2.0"
+keywords = ["micro-services", "cloud-native"]
+categories = ["system", "cloud-computing"]
+description = "Just-on-Time Cloud-Native Application Crafting"
+
+[lib] # Our tiny mrbig_core library
+name = "mrbig_core"
+path = "src/lib.rs"
+
+[features]
+default = ["grpc"]
+# The "grpc" feature depends on the tonic package.
+grpc = ["tonic", "grpc_reflection", "tonic-health"]
+# Do not enable env_log if traceable is enabled
+env_log = ["env_logger"]
+# Do not enable traceable if env_log is enabled
+traceable = ["tracing-subscriber", "rand", "http", "ansi_term"]
+telemetry = ["prometheus", "lazy_static", "hyper"]
+
+[dependencies]
+tonic = { version = "{{tonicVersion}}", optional = true }
+tonic-health = { version = "{{tonicHealthVersion}}", optional = true }
+tokio = { version = "{{tokioVersion}}", default-features = false, features = ["process"] }
+futures = { version = "{{futuresVersion}}", default-features = false, features = ["std"] }
+toml = "0.5.6"
+getopts = "0.2.21"
+serde_derive = "1.0"
+serde = "1.0"
+grpc_reflection = { path = "../grpc_reflection", optional = true }
+log = "0.4.8"
+env_logger = { version = "0.5.13", optional = true }
+tracing = "0.1"
+tracing-subscriber = { version = "0.2.5", optional = true, features = ["tracing-log", "env-filter"] }
+rand = { version = "0.7", optional = true }
+http = { version = "0.2", optional = true }
+ansi_term = { version = "0.11.0", optional = true }
+prometheus = { version = "0.8.0", optional = true }
+lazy_static = { version = "1.4", optional = true }
+hyper = { version = "{{hyperVersion}}", optional = true }

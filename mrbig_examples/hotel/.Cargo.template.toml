@@ -1,0 +1,43 @@
+###############################################################################
+#                                                                             #
+# examples/hotel/Cargo.toml                                                   #
+#                                                                             #
+# Handcrafted with love by MrBig Mobsters                                     #
+# All rights reserved                                                         #
+#                                                                             #
+#                                                                             #
+# Description: Cargo config for hotel microservice example.                   #
+# See:         https://doc.rust-lang.org/cargo/reference/manifest.html        #
+###############################################################################
+
+[package]
+name = "hotel"
+version = "{{crateVersion}}"
+authors = [
+    "MrBig Mobsters <mobsters@mrbig.org>"
+]
+edition = "2018"
+repository = "https://github.com/bobbie-ai/mrbig"
+homepage = "https://github.com/bobbie-ai/mrbig"
+documentation = "https://github.com/bobbie-ai/mrbig"
+license = "MIT/Apache-2.0"
+keywords = ["micro-services", "cloud-native"]
+categories = ["system", "cloud-computing"]
+description = "Just-on-Time Cloud-Native Application Crafting"
+
+[[bin]]
+name = "client"
+path = "src/client.rs"
+
+[dependencies]
+tonic = "{{tonicVersion}}"
+hyper = "{{hyperVersion}}"
+tower = "{{towerVersion}}"
+bytes = "{{bytesVersion}}"
+prost = "{{prostVersion}}"
+tokio = { version = "{{tokioVersion}}", features = ["macros"] }
+mrbig_core = { path = "../../mrbig_core", features = ["traceable"] }
+mrbig_derive = { path = "../../mrbig_derive" }
+
+[build-dependencies]
+mrbig_build = { path = "../../mrbig_build" }

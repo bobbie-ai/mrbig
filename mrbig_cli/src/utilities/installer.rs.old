@@ -1,0 +1,189 @@
+// ############################################################################
+// #                                                                          #
+// # mrbig_cli/src/utilities/installer.rs                                     #
+// #                                                                          #
+// # Handcrafted with love by MrBig Mobsters                                  #
+// # All rights reserved                                                      #
+// #                                                                          #
+// #                                                                          #
+// # Description: Application installer and updater.                          #
+// ############################################################################
+
+//! Application installation and upgrading routines.
+//!
+//! This module provides routines to automatically upgrade the application when
+//! a new version is available on the `crates.io` repository.
+
+// Import external dependencies
+use anyhow::{Context, Error};
+use atty;
+use std::env;
+use std::fs;
+use std::io;
+use std::path::Path;
+use std::process;
+use std::sync::mpsc;
+use std::thread;
+use which;
+
+// Import internal dependencies
+use super::cargo::Crate;
+use crate::errors::Result;
+
+
+/// Available versions of the application
+///
+/// This structure contains the currently installed version of the application
+/// and the one which is available for upgrading the application (if available).
+pub struct ApplicationVersions {
+
+  /// Currently installed version of the application
+  pub current: String,
+
+  /// Latest available version of the application
+  pub latest: String,
+}
+
+/// Application installer and updater.
+pub struct ApplicationInstaller {}
+
+
+// Public functions
+impl ApplicationInstaller {
+
+
+  /// Installs a new (or upgrade) version of the application.
+  pub fn install_new_application_version() -> ! {
+
+    if let Err(e) = ApplicationInstaller::_install_application() {
+      eprintln!("{}", e);
+      for cause in e.iter_causes() {
+          eprintln!("Caused by: {}", cause);
+      }
+    }
+
+    // On Windows we likely popped up a console for the installation. If we were
+    // to exit here immediately then the user wouldn't see any error that
+    // happened above or any successful message. Let's wait for them to say
+    // they've read everything and then continue.
+    if cfg!(windows) {
+        println!("Press enter to close this window...");
+        let mut line = String::new();
+        drop(io::stdin().read_line(&mut line));
+    }
+
+    process::exit(0);
+  }
+
+} // end of public functions
+
+
+// Private functions
+impl ApplicationInstaller {
+
+  /// Returns currently installed version of the application and eventual updates.
+  ///
+  /// The currently intalled version of the application, as well as the latest available
+  /// version for update are returned.
+  fn _check_application_versions() -> Result<ApplicationVersions> {
+
+    match ApplicationInstaller::_get_installed_version() {
+      Some(current) =>
+        Ok(
+          ApplicationVersions {
+            current,
+            latest: Crate::get_latest_version()?.unwrap_or_else(|| "".to_string())
+          }),
+
+      None => Err(anyhow!("Cannot determine the current version of Mr. Big application! Make sure the installation path is correct."))
+    }
+  }
+
+  // Returns the currently installed version of the application.
+  fn _get_installed_version() -> Option<String> {
+
+    let output = env!("CARGO_PKG_VERSION");
+    Some(output.to_string())
+  }
+
+  // Executes the installation process
+  fn _install_application() -> Result<()> {
+
+    // Find `rustup.exe` in PATH, we'll be using its installation directory as
+    // our installation directory.
+    let rustup = match which::which("rustup") {
+      Ok(path) => path,
+      _ => {
+        Err(anyhow!(
+              "failed to find an installation of `rustup` in `PATH`, \
+                is `rustup` already installed?"
+        ))
+      }
+    };
+
+    let installation_dir = match rustup.parent() {
+      Some(parent) => parent,
+      None => Err(anyhow!("can't install when `rustup` is at the root of the filesystem")),
+    };
+
+    let destination = installation_dir
+      .join("mrbig")
+      .with_extension(env::consts::EXE_EXTENSION);
+
+    if destination.exists() {
+      ApplicationInstaller::_confirm_can_overwrite_executable(&destination)?;
+    }
+
+    // Retuns the executable file of the application
+    let executable = env::current_exe()?;
+
+    fs::copy(&executable, &destination)
+      .with_context(|| format!("failed to copy executable to `{}`", destination.display()))?;
+
+    println!(
+      "info: successfully installed new version of Mr. Big to `{}`",
+      destination.display()
+    );
+
+    Ok(())
+  }
+
+  // Check if one really wants to ovewrite the current application executable
+  fn _confirm_can_overwrite_executable(destination: &Path) -> Result<()> {
+
+    // Check if the `-f` or `--force` argument, for forcing installation was passed
+    if env::args().any(|arg| arg == "-f") {
+        return Ok(());
+    }
+
+    // If we're not attached to a TTY then we can't get user input, so there's
+    // nothing to do except inform the user about the `-f` flag.
+    if !atty::is(atty::Stream::Stdin) {
+        Err(anyhow!(
+            "existing Mr. Big installation found at `{}`, pass `-f|--force` to \
+             force installation over this file, otherwise aborting \
+             installation now",
+             destination.display()
+        ));
+    }
+
+    // It looks like we're at an interactive prompt, so ask the user if they'd
+    // like to overwrite the previous installation.
+    eprintln!(
+        "info: existing Mr. Big installation found at `{}`",
+        destination.display()
+    );
+    eprint!("info: would you like to overwrite this executable file? [y/N]: ");
+    let mut line = String::new();
+    io::stdin()
+      .read_line(&mut line)
+      .with_context(|| "failed to read stdin")?;
+
+    if line.starts_with('y') || line.starts_with('Y') {
+        return Ok(());
+    }
+
+    Err(anyhow!("aborting Mr. Big installation"))
+  }
+
+} // end of private functions

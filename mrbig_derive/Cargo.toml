@@ -1,0 +1,35 @@
+###############################################################################
+#                                                                             #
+# mrbig_derive/Cargo.toml                                                     #
+#                                                                             #
+# Handcrafted with love by MrBig Mobsters                                     #
+# All rights reserved                                                         #
+#                                                                             #
+#                                                                             #
+# Description: Cargo config used to build proc macro derive crate.            #
+# See:         https://doc.rust-lang.org/cargo/reference/manifest.html        #
+###############################################################################
+
+[package]
+name = "mrbig_derive"
+version = "0.3.0"
+edition = "2018"
+authors = [
+    "MrBig Mobsters <mobsters@mrbig.org>"
+]
+repository = "https://github.com/bobbie-ai/mrbig"
+homepage = "https://github.com/bobbie-ai/mrbig"
+documentation = "https://github.com/bobbie-ai/mrbig"
+license = "MIT/Apache-2.0"
+keywords = ["micro-services", "cloud-native"]
+categories = ["system", "cloud-computing"]
+description = "Just-on-Time Cloud-Native Application Crafting"
+
+[lib] # Our procedural macro library
+path = "src/mod.rs"
+proc-macro = true
+
+[dependencies]
+syn = { version = "1.0.13", features = ["full", "extra-traits"] }
+quote = "1.0.2"
+heck = "0.3"

@@ -1,0 +1,3 @@
+status: SERVING
+status: NOT_SERVING
+status: SERVING

@@ -1,0 +1,16 @@
+crateVersion: "0.3.0"
+tonicVersion: "0.3.1"
+tonicBuildVersion: "0.3.1"
+tonicHealthVersion: "0.2.0"
+tonic: '{ version = "0.3.1", optional = true }'
+tonicHealth: '{ version = "0.2.0", optional = true }'
+tonicBuild: '{ version = "0.3.1", optional = true }'
+tokioVersion: "0.2"
+futuresVersion: "0.3"
+towerVersion: "0.3.1"
+synVersion: "1.0.13"
+quoteVersion: "1.0.2"
+hyperVersion: "0.13"
+bytesVersion: "0.5"
+prostVersion: "0.6"
+asyncStreamVersion: "0.2"

@@ -1,0 +1,60 @@
+###############################################################################
+#                                                                             #
+# tests/reflection/Cargo.toml                                                 #
+#                                                                             #
+# Handcrafted with love by MrBig Mobsters                                     #
+# All rights reserved                                                         #
+#                                                                             #
+#                                                                             #
+# Description: Cargo config for gRPC tests.                                   #
+# See:         https://doc.rust-lang.org/cargo/reference/manifest.html        #
+###############################################################################
+
+[package]
+name = "grpc-tests"
+version = "{{crateVersion}}"
+authors = [
+    "MrBig Mobsters <mobsters@mrbig.org>"
+]
+edition = "2018"
+repository = "https://github.com/bobbie-ai/mrbig"
+homepage = "https://github.com/bobbie-ai/mrbig"
+documentation = "https://github.com/bobbie-ai/mrbig"
+license = "MIT/Apache-2.0"
+keywords = ["micro-services", "cloud-native"]
+categories = ["system", "cloud-computing"]
+description = "Just-on-Time Cloud-Native Application Crafting"
+
+[[bin]]
+name = "test_grpc_service"
+path = "src/test_grpc_service.rs"
+
+[[bin]]
+name = "test_grpc_no_reflection"
+path = "src/test_grpc_no_reflection.rs"
+
+[[bin]]
+name = "test_grpc_multiple"
+path = "src/test_grpc_multiple.rs"
+
+[[bin]]
+name = "test_grpc_no_health"
+path = "src/test_grpc_no_health.rs"
+
+[[bin]]
+name = "test_grpc_traceable"
+path = "src/test_grpc_traceable.rs"
+
+[dependencies]
+tonic = "{{tonicVersion}}"
+hyper = "{{hyperVersion}}"
+tower = "{{towerVersion}}"
+bytes = "{{bytesVersion}}"
+prost = "{{prostVersion}}"
+tokio = { version = "{{tokioVersion}}", features = ["macros", "process", "rt-threaded"] }
+mrbig_core = { path = "../../mrbig_core", features = ["traceable", "telemetry"] }
+mrbig_derive = { path = "../../mrbig_derive" }
+log = "0.4"
+
+[build-dependencies]
+mrbig_build = { path = "../../mrbig_build" }

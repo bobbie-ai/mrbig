@@ -1,0 +1,19 @@
+filename: health.proto
+package: grpc.health.v1;
+service Health {
+  rpc Check(grpc.health.v1.HealthCheckRequest) returns (grpc.health.v1.HealthCheckResponse) {}
+  rpc Watch(grpc.health.v1.HealthCheckRequest) returns (stream grpc.health.v1.HealthCheckResponse) {}
+}
+
+filename: reflection.proto
+package: grpc.reflection.v1alpha;
+service ServerReflection {
+  rpc ServerReflectionInfo(stream grpc.reflection.v1alpha.ServerReflectionRequest) returns (stream grpc.reflection.v1alpha.ServerReflectionResponse) {}
+}
+
+filename: hotel.proto
+package: hotel;
+service Hotel {
+  rpc Rates(hotel.Request) returns (hotel.Response) {}
+}
+

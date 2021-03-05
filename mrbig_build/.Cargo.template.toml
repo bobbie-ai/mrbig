@@ -1,0 +1,44 @@
+###############################################################################
+#                                                                             #
+# mrbig_build/Cargo.toml                                                      #
+#                                                                             #
+# Handcrafted with love by MrBig Mobsters                                     #
+# All rights reserved                                                         #
+#                                                                             #
+#                                                                             #
+# Description: Cargo config of mrbig_build crate for code generation.         #
+# See:         https://doc.rust-lang.org/cargo/reference/manifest.html        #
+###############################################################################
+
+[package]
+name = "mrbig_build"
+version = "{{crateVersion}}"
+edition = "2018"
+authors = [
+    "MrBig Mobsters <mobsters@mrbig.org>"
+]
+repository = "https://github.com/bobbie-ai/mrbig"
+homepage = "https://github.com/bobbie-ai/mrbig"
+documentation = "https://github.com/bobbie-ai/mrbig"
+license = "MIT/Apache-2.0"
+keywords = ["micro-services", "cloud-native"]
+categories = ["system", "cloud-computing"]
+description = "Just-on-Time Cloud-Native Application Crafting"
+
+[lib]
+name = "mrbig_build"
+path = "src/lib.rs"
+
+[features]
+default = ["reflection", "grpc"]
+# The "reflection" feature depends on the reflection package.
+reflection = ["grpc_reflection_build"]
+# The "grpc" feature depends on the tonic_build package.
+grpc = ["tonic-build"]
+
+[dependencies]
+syn = { version = "{{synVersion}}", features = ["full"] }
+quote = "{{quoteVersion}}"
+tempfile = "3.1.0"
+grpc_reflection_build = { path = "../grpc_reflection_build", optional = true }
+tonic-build = { version = "{{tonicBuildVersion}}", optional = true }

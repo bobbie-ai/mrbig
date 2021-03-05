@@ -1,0 +1,24 @@
+filename: reflection.proto
+package: grpc.reflection.v1alpha;
+service ServerReflection {
+  rpc ServerReflectionInfo(stream grpc.reflection.v1alpha.ServerReflectionRequest) returns (stream grpc.reflection.v1alpha.ServerReflectionResponse) {}
+}
+
+filename: hotel.proto
+package: hotel;
+service Hotel {
+  rpc Rates(hotel.Request) returns (hotel.Response) {}
+}
+
+filename: profile.proto
+package: profile;
+service Profile {
+  rpc GetProfiles(profile.Request) returns (profile.Result) {}
+}
+
+filename: rate.proto
+package: rate;
+service Rate {
+  rpc GetRates(rate.Request) returns (rate.Result) {}
+}
+

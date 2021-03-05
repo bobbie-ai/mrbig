@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -euf -o pipefail
+
+DATAFILE=.Cargo.data.yaml
+
+RESULTS=$(find . -name "Cargo.toml" | grep -v -e "^\./Cargo.toml" -e "\./mrbig_hatch" -e "\./mrbig_cli/Cargo.toml$" | xargs dirname)
+
+for item in ${RESULTS}; do
+    cat ${DATAFILE} | mustache - ${item}/.Cargo.template.toml > ${item}/Cargo.toml
+done
+
+#cat ${DATAFILE} | mustache - mrbig_core/.Cargo.template.toml > mrbig_core/Cargo.toml
+#cat ${DATAFILE} | mustache - mrbig_build/.Cargo.template.toml > mrbig_build/Cargo.toml
+
+# ./mrbig_derive/Cargo.toml
+# ./grpc_reflection/Cargo.toml
+# ./tests/health/Cargo.toml
+# ./tests/reflection/Cargo.toml
+# ./tests/grpc/Cargo.toml
+# ./tests/codegen/Cargo.toml
+# ./examples/hotel/Cargo.toml
+# ./mrbig_cli/src/templates/helloworld/Cargo.toml
+# ./mrbig_cli/Cargo.toml
+# ./mrbig_build/Cargo.toml
+# ./mrbig_core/Cargo.toml
+# ./grpc_reflection_build/Cargo.toml
+# ./mrbig_hatch/Cargo.toml

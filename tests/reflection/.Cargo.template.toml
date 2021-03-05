@@ -1,0 +1,41 @@
+###############################################################################
+#                                                                             #
+# tests/reflection/Cargo.toml                                                 #
+#                                                                             #
+# Handcrafted with love by MrBig Mobsters                                     #
+# All rights reserved                                                         #
+#                                                                             #
+#                                                                             #
+# Description: Cargo config for reflection tests.                             #
+# See:         https://doc.rust-lang.org/cargo/reference/manifest.html        #
+###############################################################################
+
+[package]
+name = "reflection-tests"
+version = "{{crateVersion}}"
+authors = [
+    "MrBig Mobsters <mobsters@mrbig.org>"
+]
+edition = "2018"
+repository = "https://github.com/bobbie-ai/mrbig"
+homepage = "https://github.com/bobbie-ai/mrbig"
+documentation = "https://github.com/bobbie-ai/mrbig"
+license = "MIT/Apache-2.0"
+keywords = ["micro-services", "cloud-native"]
+categories = ["system", "cloud-computing"]
+description = "Just-on-Time Cloud-Native Application Crafting"
+
+[[bin]]
+name = "test_reflection_server"
+path = "src/test_reflection_server.rs"
+
+[dependencies]
+tonic = "{{tonicVersion}}"
+hyper = "{{hyperVersion}}"
+tower = "{{towerVersion}}"
+bytes = "{{bytesVersion}}"
+tokio = { version = "{{tokioVersion}}", features = ["macros", "process"] }
+grpc_reflection = { path = "../../grpc_reflection" }
+
+[build-dependencies]
+grpc_reflection_build = { path = "../../grpc_reflection_build" }

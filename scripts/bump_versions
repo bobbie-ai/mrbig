@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Make sure this script is run at the root of the repo.
+
+set -euf -o pipefail
+
+PREV=$1
+NEW=$2
+
+for file in $(find . -name "Cargo.toml" -not -path "./target"); do
+     sed -i "0,/^version\ =\ \"${PREV}\"/{s/^version\ =\ \"${PREV}\"/version\ =\ \"${NEW}\"/}" ${file}
+done

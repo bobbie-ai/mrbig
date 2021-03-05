@@ -1,0 +1,35 @@
+###############################################################################
+#                                                                             #
+# mrbig/Cargo.toml                                                            #
+#                                                                             #
+# Handcrafted with love by MrBig Mobsters                                     #
+# All rights reserved                                                         #
+#                                                                             #
+#                                                                             #
+# Description: Main Cargo script used to build various project's components.  #
+# See:         https://doc.rust-lang.org/cargo/reference/manifest.html        #
+###############################################################################
+
+[workspace]
+members = [
+   "mrbig_cli",
+   "mrbig_hatch",
+   "mrbig_derive",
+   "mrbig_build",
+   "mrbig_core",
+   "mrbig_examples/hotel",
+   "tests/codegen",
+   "tests/reflection",
+   "tests/grpc",
+   "tests/health"
+]
+
+# Development profile (used with `cargo build ...` command)
+[profile.dev]
+opt-level = 0           # Controls code optimization level (should be low, here)
+debug = true            # Controls whether the compiler passes `-g`
+
+# Release profile (used with `cargo build --release ...` command)
+[profile.release]
+opt-level = 3
+debug = false

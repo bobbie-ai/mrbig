@@ -1,0 +1,34 @@
+###############################################################################
+#                                                                             #
+# Cargo.toml                                                                  #
+#                                                                             #
+# Handcrafted with love by MrBig Mobsters                                     #
+# All rights reserved                                                         #
+#                                                                             #
+#                                                                             #
+# Description: Cargo config.                                                  #
+# See:         https://doc.rust-lang.org/cargo/reference/manifest.html        #
+###############################################################################
+
+[package]
+name = "{{project-name}}"
+version = "{{crateVersion}}"
+authors = []
+edition = "2018"
+
+[[bin]]
+name = "{{project-name}}"
+path = "src/main.rs"
+
+[dependencies]
+tonic = "{{tonicVersion}}"
+hyper = "{{hyperVersion}}"
+tower = "{{towerVersion}}"
+bytes = "{{bytesVersion}}"
+prost = "{{prostVersion}}"
+tokio = { version = "{{tokioVersion}}", features = ["macros"] }
+mrbig_core = { git = "https://github.com/bobbie-ai/mrbig" }
+mrbig_derive = { git = "https://github.com/bobbie-ai/mrbig" }
+
+[build-dependencies]
+mrbig_build = { git = "https://github.com/bobbie-ai/mrbig" }

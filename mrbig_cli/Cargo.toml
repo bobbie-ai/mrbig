@@ -1,0 +1,87 @@
+###############################################################################
+#                                                                             #
+# mrbig/cli/Cargo.toml                                                        #
+#                                                                             #
+# Handcrafted with love by MrBig Mobsters                                     #
+# All rights reserved                                                         #
+#                                                                             #
+# Description: Cargo script used to build the MrBig CLI (Command-Line         #
+#              Interface).                                                    #
+# See:         https://doc.rust-lang.org/cargo/reference/manifest.html        #
+###############################################################################
+
+[package]
+name = "mrbig-cli"
+version = "0.2.1"
+edition = "2018"
+readme = "README.md"
+description = """
+Command-line interface (CLI) for Mr. Big ecosystem
+"""
+authors = [
+  "The Mr. Big Mobsters <mobsters@mrbig.io>"
+]
+exclude = [
+	".github/*",
+	"examples/*",
+	"tests/*",
+	"benches/*",
+	"*.png",
+	"*.dot",
+	"*.yml",
+	"*.toml",
+	"*.md",
+]
+include = [
+  "src/**/*",
+  "Cargo.toml",
+  "README.md"
+]
+
+# CLI executable
+[[bin]]
+name = "mrbig"
+path = "src/main.rs"
+
+# Runtime dependencies
+[dependencies]
+anyhow = "1.0"
+atty   = { version = "0.2.2",  optional = false }
+cargo_metadata = "0.8.0"
+chrono = "0.4.10"
+clap   = "2.33"
+colored = "1.9.2"
+config = { version = "0.10.1", default-features = false, features = ["toml"] }
+console = "0.11"
+curl = "0.4.13"
+dialoguer = "0.6"
+env_logger = { version = "0.5.13", default-features = false }
+#failure = "0.1.2"
+heck = "0.3.0"
+human-panic = "1.0.1"
+indicatif = "0.13.0"
+liquid = "0.19.0"
+liquid-derive = "0.19"
+log = "0.4.6"
+serde = "1.0.74"
+serde_derive = "1.0.74"
+serde_ignored = "0.0.4"
+serde_json = "1.0.26"
+structopt = "0.3"
+strsim = "0.8.0"
+thiserror = "1.0"
+toml = "0.5"
+which = "2.0.0"
+
+
+[target.'cfg(not(windows))'.dependencies]
+ansi_term = { version = "0.12.1", optional = true }
+
+[features]
+#color     = ["ansi_term", "atty"]
+unstable  = [] # for building with unstable MrBig features (doesn't necessarily require nightly Rust) - currently none
+nightly   = [] # for building with unstable Rust features - currently none
+debug     = [] # enables debug messages
+
+# [[test]]
+# name = "tests"

@@ -1,0 +1,43 @@
+###############################################################################
+#                                                                             #
+# tests/health/Cargo.toml                                                     #
+#                                                                             #
+# Handcrafted with love by MrBig Mobsters                                     #
+# All rights reserved                                                         #
+#                                                                             #
+#                                                                             #
+# Description: Cargo config for health check tests.                           #
+# See:         https://doc.rust-lang.org/cargo/reference/manifest.html        #
+###############################################################################
+
+[package]
+name = "health-tests"
+version = "{{crateVersion}}"
+authors = [
+    "MrBig Mobsters <mobsters@mrbig.org>"
+]
+edition = "2018"
+repository = "https://github.com/bobbie-ai/mrbig"
+homepage = "https://github.com/bobbie-ai/mrbig"
+documentation = "https://github.com/bobbie-ai/mrbig"
+license = "MIT/Apache-2.0"
+keywords = ["micro-services", "cloud-native"]
+categories = ["system", "cloud-computing"]
+description = "Just-on-Time Cloud-Native Application Crafting"
+
+[[bin]]
+name = "test_health_server"
+path = "src/test_health_server.rs"
+
+[dependencies]
+tonic = "{{tonicVersion}}"
+hyper = "{{hyperVersion}}"
+tower = "{{towerVersion}}"
+bytes = "{{bytesVersion}}"
+prost = "{{prostVersion}}"
+tokio = { version = "{{tokioVersion}}", features = ["macros", "process", "rt-threaded"] }
+futures = { version = "{{futuresVersion}}", default-features = false, features = ["std", "alloc"] }
+tonic-health = { version = "{{tonicHealthVersion}}" }
+
+[build-dependencies]
+tonic-build = "{{tonicBuildVersion}}"

@@ -1,0 +1,39 @@
+###############################################################################
+#                                                                             #
+# grpc_reflection/Cargo.toml                                                  #
+#                                                                             #
+# Handcrafted with love by MrBig Mobsters                                     #
+# All rights reserved                                                         #
+#                                                                             #
+#                                                                             #
+# Description: Cargo config for grpc reflection server build code.            #
+# See:         https://doc.rust-lang.org/cargo/reference/manifest.html        #
+###############################################################################
+
+[package]
+name = "grpc_reflection_build"
+version = "{{crateVersion}}"
+authors = [
+    "MrBig Mobsters <mobsters@mrbig.org>"
+]
+edition = "2018"
+repository = "https://github.com/bobbie-ai/mrbig"
+homepage = "https://github.com/bobbie-ai/mrbig"
+documentation = "https://github.com/bobbie-ai/mrbig"
+license = "MIT/Apache-2.0"
+keywords = ["micro-services", "cloud-native"]
+categories = ["system", "cloud-computing"]
+description = "Just-on-Time Cloud-Native Application Crafting"
+
+[lib]
+name = "grpc_reflection_build"
+path = "src/lib.rs"
+
+[dependencies]
+prost = "{{prostVersion}}"
+tempfile = "3.1.0"
+prost-types = "{{prostVersion}}"
+prost-build = "{{prostVersion}}"
+base64 = "0.11"
+quote = "{{quoteVersion}}"
+syn = { version = "{{synVersion}}", features = ["full"] }

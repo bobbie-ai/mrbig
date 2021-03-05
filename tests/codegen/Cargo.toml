@@ -1,0 +1,60 @@
+###############################################################################
+#                                                                             #
+# tests/codegen/Cargo.toml                                                    #
+#                                                                             #
+# Handcrafted with love by MrBig Mobsters                                     #
+# All rights reserved                                                         #
+#                                                                             #
+#                                                                             #
+# Description: Cargo config for codegen tests.                                #
+# See:         https://doc.rust-lang.org/cargo/reference/manifest.html        #
+###############################################################################
+
+[package]
+name = "codegen-tests"
+version = "0.3.0"
+authors = [
+    "MrBig Mobsters <mobsters@mrbig.org>"
+]
+edition = "2018"
+repository = "https://github.com/bobbie-ai/mrbig"
+homepage = "https://github.com/bobbie-ai/mrbig"
+documentation = "https://github.com/bobbie-ai/mrbig"
+license = "MIT/Apache-2.0"
+keywords = ["micro-services", "cloud-native"]
+categories = ["system", "cloud-computing"]
+description = "Just-on-Time Cloud-Native Application Crafting"
+
+[[bin]]
+name = "test_codegen_greeter"
+path = "src/test_codegen_greeter.rs"
+
+[[bin]]
+name = "test_codegen_greeter_config"
+path = "src/test_codegen_greeter_config.rs"
+
+[[bin]]
+name = "test_codegen_greeter_extra"
+path = "src/test_codegen_greeter_extra.rs"
+
+[[bin]]
+name = "test_codegen_register"
+path = "src/test_codegen_register.rs"
+
+[dependencies]
+tonic = "0.3.1"
+hyper = "0.13"
+tower = "0.3.1"
+bytes = "0.5"
+prost = "0.6"
+serde = "1.0"
+serde_derive = "1.0"
+tokio = { version = "0.2", features = ["macros", "sync", "stream", "time", "rt-threaded"] }
+async-stream = "0.2"
+futures = { version = "0.3", default-features = false, features = ["alloc"] }
+mrbig_core = { path = "../../mrbig_core", features = ["traceable"] }
+tracing = { version = "0.1" }
+mrbig_derive = { path = "../../mrbig_derive" }
+
+[build-dependencies]
+mrbig_build = { path = "../../mrbig_build" }

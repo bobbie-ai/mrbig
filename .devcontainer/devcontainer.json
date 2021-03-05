@@ -1,0 +1,70 @@
+// ############################################################################
+// #                                                                          #
+// # mrbig/.devcontainer/devcontainer.json                                    #
+// #                                                                          #
+// # Handcrafted with love by MrBig Mobsters                                  #
+// # All rights reserved                                                      #
+// #                                                                          #
+// #                                                                          #
+// # Description: MrBig's remote development container configuration.         #
+// ############################################################################
+{
+	"name": "Rust",
+	"dockerFile": "Dockerfile",
+	"runArgs": [
+		// Use a non-root user.
+		//
+		// On Linux, this will prevent new files getting created as root, but you
+		// may need to update the USER_UID and USER_GID in .devcontainer/Dockerfile
+		// to match your user if not 1000.
+		//"-u", "vscode",
+		"--cap-add=SYS_PTRACE",
+		"--security-opt",
+		"seccomp=unconfined",
+		// Mount user's SSH folder on /root/.ssh in the devcontainer
+		"-v",
+		"${env:HOME}${env:USERPROFILE}/.ssh:/home/vscode/.ssh:ro",
+		// Mount AWS credentials
+		"-v",
+		"${env:HOME}${env:USERPROFILE}/.aws:/home/vscode/.aws:ro",
+		// Mount Terraform Cloud credentials
+		"-v",
+		"${env:HOME}${env:USERPROFILE}/.terraformrc:/home/vscode/.terraformrc:ro",
+		// Kubernetes configurations
+		"-v",
+		"${env:HOME}${env:USERPROFILE}/.kube:/home/vscode/.kube:ro",
+		// Mount cargo cache folder to /home/vscode/.cargo (read-write)
+		"-v",
+		"${env:HOME}${env:USERPROFILE}/.cargo/registry:/usr/local/cargo/registry:rw"
+	],
+	// Use 'settings' to set *default* container specific settings.json values on container create.
+	// You can edit these settings after create using File > Preferences > Settings > Remote.
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"lldb.adapterType": "native",
+		"lldb.executable": "/usr/bin/lldb",
+		"lldb.verboseLogging": true
+	},
+	// Published ports
+	"appPort": [
+		"9999:3000",
+		"8888:8000"
+	],
+	// Uncomment the next line to run commands after the container is created.
+	//	"postCreateCommand": "cargo install cargo-raze",
+	// Uncomment the next line to have VS Code connect as an existing non-root user in the container.
+	// On Linux, by default, the container user's UID/GID will be updated to match your local user. See
+	// https://aka.ms/vscode-remote/containers/non-root for details on adding a non-root user if none exist.
+	"remoteUser": "vscode",
+	// Add the IDs of extensions you want installed when the container is created in the array below.
+	"extensions": [
+		// Rust tools
+		"rust-lang.rust",
+		"bungcip.better-toml",
+		"vadimcn.vscode-lldb",
+		"zxh404.vscode-proto3",
+		// DevOps tools (Terraform, ...)
+		"mauve.terraform",
+		"joaompinto.vscode-graphviz"
+	]
+}

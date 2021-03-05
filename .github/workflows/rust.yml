@@ -1,0 +1,40 @@
+name: Rust
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+    - name: Pull the Docker Image
+      run: docker pull bobbie-ai/mrbig-sandbox:latest
+    - name: Build with Docker Image
+      env:
+        CARGO_HOME: /github/cargo
+      run: |
+            docker run --cap-add SYS_ADMIN --cap-add NET_ADMIN \
+                --security-opt seccomp=unconfined \
+                --workdir /github/workspace \
+                --rm -e CARGO_HOME -e INPUT_ENTRYPOINT -e INPUT_ARGS \
+                -e HOME -e GITHUB_JOB -e GITHUB_REF -e GITHUB_SHA \
+                -e GITHUB_REPOSITORY -e GITHUB_REPOSITORY_OWNER \
+                -e GITHUB_RUN_ID -e GITHUB_RUN_NUMBER -e GITHUB_ACTOR \
+                -e GITHUB_WORKFLOW -e GITHUB_HEAD_REF -e GITHUB_BASE_REF \
+                -e GITHUB_EVENT_NAME -e GITHUB_WORKSPACE -e GITHUB_ACTION \
+                -e GITHUB_EVENT_PATH -e RUNNER_OS -e RUNNER_TOOL_CACHE \
+                -e RUNNER_TEMP -e RUNNER_WORKSPACE -e ACTIONS_RUNTIME_URL \
+                -e ACTIONS_RUNTIME_TOKEN -e ACTIONS_CACHE_URL \
+                -e GITHUB_ACTIONS=true -e CI=true \
+                -v "/var/run/docker.sock":"/var/run/docker.sock" \
+                -v "/home/core/actions-runner/_work/_temp/_github_home":"/github/home" \
+                -v "/home/core/actions-runner/_work/_temp/_github_workflow":"/github/workflow" \
+                -v ${{ github.workspace }}:"/github/workspace" \
+                -v "/home/core/actions-runner/.cargo":"/github/cargo" \
+                -u 1000:1000 \
+                bobbie-ai/mrbig-sandbox:latest \
+                    cargo make ci

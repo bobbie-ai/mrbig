@@ -1,0 +1,107 @@
+###############################################################################
+#                                                                             #
+# mrbig/Makefile.toml                                                         #
+#                                                                             #
+# Handcrafted with love by MrBig Mobsters                                     #
+# All rights reserved                                                         #
+#                                                                             #
+#                                                                             #
+# Description: Main building script which relies on 'cargo-make' crate to be  #
+#              executed.                                                      #
+# See:         https://github.com/sagiegurari/cargo-make                      #
+###############################################################################
+
+
+[tasks.format]
+install_crate = "rustfmt"
+command = "cargo"
+args = ["fmt", "--", "--write-mode=overwrite"]
+
+[tasks.clean]
+command = "cargo"
+args = ["clean"]
+
+# Check source code (without generating binaries)
+[tasks.check]
+command = "cargo"
+args = ["check"]
+
+# Build all components
+[tasks.build]
+command = "cargo"
+args = ["build"]
+dependencies = ["clean"]
+
+# Build MrBig CLI component
+[tasks.cli-build]
+description = "Build the CLI component"
+command = "cargo"
+args = ["build", "--package", "mrbig-cli"]
+dependencies = ["clean"]
+
+[tasks.unit-tests]
+command = "cargo"
+args = ["test"]
+
+[tasks.all-tests]
+workspace = false
+dependencies = ["unit-tests", "integration-tests"]
+
+[tasks.integration-tests]
+workspace = false
+script = [
+'''
+cd tests
+./run_tests
+'''
+]
+
+[tasks.test]
+alias = "all-tests"
+
+# Build all examples
+[tasks.examples]
+workspace = false
+script = [
+'''
+cd mrbig_examples
+cargo build
+'''
+]
+
+[tasks.ci]
+workspace = false
+dependencies = ["build", "all-tests"]
+
+# Generate MrBig book, using 'mdbook' tool
+[tasks.book-build]
+workspace = false
+script = [
+    '''
+    cd mrbig_book
+    mdbook build
+    '''
+]
+
+# Generate MrBig book website and serve it (doing hot reload for each modification)
+[tasks.book-serve]
+workspace = false
+script = [
+'''
+cd mrbig_book
+mdbook serve --hostname 0.0.0.0
+'''
+]
+
+[tasks.default]
+dependencies = [
+    "format",
+    "build",
+    "test"
+]
+
+[env]
+# can be defined as kcov, tarpaulin, ...
+CARGO_MAKE_COVERAGE_PROVIDER = "kcov"
+# for example: cargo make filter regex would be cargo_make-[a-z0-9]*$
+#CARGO_MAKE_TEST_COVERAGE_BINARY_FILTER = "test_[a-z0-9_]*-[a-z0-9]*$"

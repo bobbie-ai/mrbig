@@ -1,0 +1,1 @@
+  rpc Rates(hotel.Request) returns (hotel.Response) {}

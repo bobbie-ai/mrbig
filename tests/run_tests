@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -eux -o pipefail
+
+TEST_FILES=$(find . -maxdepth 2 -type f -name "test.sh")
+
+for t in $TEST_FILES
+do
+    (cd $(dirname $t) && bash test.sh)
+done
